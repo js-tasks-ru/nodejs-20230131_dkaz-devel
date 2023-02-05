@@ -1,5 +1,4 @@
 function sum(a, b) {
-
  if (a !== +a || b !== +b) {
      throw new TypeError()
  }
