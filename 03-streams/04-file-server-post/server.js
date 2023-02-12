@@ -52,6 +52,8 @@ server.on('request', (req, res) => {
 
         req.on('aborted', () => {
           deleteFile()
+          file.destroy()
+          limitStream.destroy()
         })
 
         break;
