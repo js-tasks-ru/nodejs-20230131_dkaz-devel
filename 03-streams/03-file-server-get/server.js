@@ -14,33 +14,33 @@ server.on('request', (req, res) => {
   if (pathname.includes('/')) {
     res.statusCode = 400;
     res.end('Incorrect path')
-  }
+  } else {
+    switch (req.method) {
+      case 'GET':
+        const stream = fs.createReadStream(filepath);
 
-  switch (req.method) {
-    case 'GET':
-      const stream = fs.createReadStream(filepath);
+        stream.on('error', err => {
+          if (err.code === 'ENOENT') {
+            res.statusCode = 404;
+            res.end('File is not found')
+          } else {
+            res.statusCode = 500;
+            res.end('Something went wrong')
+          }
+        })
 
-      stream.on('error', err => {
-        if (err.code === 'ENOENT') {
-          res.statusCode = 404;
-          res.end('File is not found')
-        } else {
-          res.statusCode = 500;
-          res.end('Something went wrong')
-        }
-      })
+        stream.pipe(res);
 
-      stream.pipe(res);
+        req.on('aborted', () => {
+          stream.destroy()
+        })
 
-      req.on('aborted', () => {
-        stream.destroy()
-      })
+        break;
 
-      break;
-
-    default:
-      res.statusCode = 501;
-      res.end('Not implemented');
+      default:
+        res.statusCode = 501;
+        res.end('Not implemented');
+    }
   }
 
 });
