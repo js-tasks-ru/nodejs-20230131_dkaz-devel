@@ -55,7 +55,6 @@ server.on('request', (req, res) => {
           file.destroy()
           limitStream.destroy()
         })
-
         break;
 
       default:
