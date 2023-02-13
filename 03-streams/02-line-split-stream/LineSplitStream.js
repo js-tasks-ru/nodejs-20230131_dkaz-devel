@@ -10,7 +10,7 @@ class LineSplitStream extends stream.Transform {
   _transform(chunk, encoding, callback) {
     const chunkArr = chunk.toString().split(``);
 
-    chunkArr.forEach((chunkEl, index) => {
+    chunkArr.forEach((chunkEl) => {
       if (chunkEl === `${os.EOL}`) {
         this.push(this.result.join(''))
         this.result = [];

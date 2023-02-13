@@ -6,10 +6,10 @@ const fs = require("fs");
 const server = new http.Server();
 
 server.on('request', (req, res) => {
-  const url = new URL(req.url, `http://localhost:3000/${req.headers.host}`);
+  const url = new URL(req.url, `${req.headers.host}`);
   const pathname = url.pathname.slice(1);
 
-  const filepath = path.join(__dirname, 'test/fixtures', pathname);
+  const filepath = path.join(__dirname, 'files', pathname);
 
   if (pathname.includes('/')) {
     res.statusCode = 400;
