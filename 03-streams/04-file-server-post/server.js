@@ -3,6 +3,7 @@ const http = require('http');
 const path = require('path');
 const fs = require("fs");
 const LimitSizeStream = require("./LimitSizeStream");
+const LimitExceededError = require("./LimitExceededError")
 
 const server = new http.Server();
 
@@ -10,6 +11,8 @@ server.on('request', (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const pathname = url.pathname.slice(1);
   const filepath = path.join(__dirname, 'files', pathname);
+
+
 
   if (pathname.includes('/')) {
     res.statusCode = 400;
@@ -34,9 +37,14 @@ server.on('request', (req, res) => {
         })
 
         limitStream.on('error', err => {
-          deleteFile()
-          res.statusCode = 413;
-          res.end(err.code)
+          if (err instanceof LimitExceededError) {
+            res.statusCode = 413;
+            res.end(err.code)
+            deleteFile()
+          } else {
+            res.statusCode = 500;
+            res.end('Something went wrong')
+          }
         })
 
         file.on('error', err => {
@@ -45,7 +53,7 @@ server.on('request', (req, res) => {
           res.end('Something went wrong')
         })
 
-        limitStream.on('end', () => {
+        file.on('finish', () => {
           res.statusCode = 201;
           res.end('Created')
         })
