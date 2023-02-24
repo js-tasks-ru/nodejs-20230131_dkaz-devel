@@ -17,11 +17,6 @@ module.exports = class Validator {
         continue
       }
 
-      if (type !== rules.type) {
-        errors.push({field, error: `expect ${rules.type}, got ${type}`});
-        continue
-      }
-
       if (!rules.min) {
         errors.push({field, error: `did not get the min filter`});
         continue
@@ -29,6 +24,11 @@ module.exports = class Validator {
 
       if (!rules.max) {
         errors.push({field, error: `did not get the max filter`});
+        continue
+      }
+
+      if (type !== rules.type) {
+        errors.push({field, error: `expect ${rules.type}, got ${type}`});
         continue
       }
 
