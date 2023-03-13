@@ -36,7 +36,7 @@ module.exports = {
     },
   },
   mailer: {
-    user: 'dkaz.devel.testing@gmail.com',
-    password: 'rvzrvpzgoirgeffo',
+    user: '',
+    password: '',
   },
 };
