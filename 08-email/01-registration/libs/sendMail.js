@@ -40,6 +40,7 @@ transport.use('compile', htmlToText());
 *     });
 * */
 module.exports = async function sendMail(options) {
+
   const html = pug.renderFile(
       path.join(__dirname, '../templates', options.template) + '.pug',
       options.locals || {},
